@@ -1,0 +1,177 @@
+[
+  {
+    "id": "81d04927-ee96-4b17-82f4-83e9bee705a4",
+    "name": "Cloud Runner Shoes",
+    "description": "Lightweight running shoes for warm-weather training.",
+    "category": "footwear",
+    "tags": ["running", "lightweight", "summer"]
+  },
+  {
+    "id": "7381bede-ffcf-4efb-8d78-3db7168d2408",
+    "name": "Summit Trail Shoes",
+    "description": "Grippy trail shoes with a rock plate for wet mountain paths.",
+    "category": "footwear",
+    "tags": ["hiking", "trail", "waterproof"]
+  },
+  {
+    "id": "51157435-2648-4557-b2d6-4506fd07375b",
+    "name": "Metro Canvas Sneakers",
+    "description": "Breathable everyday canvas sneakers with cushioned insoles.",
+    "category": "footwear",
+    "tags": ["casual", "canvas", "city"]
+  },
+  {
+    "id": "e328ea99-6be0-4f7c-9993-195719189b76",
+    "name": "Pine Daypack 20L",
+    "description": "Compact hiking backpack with a ventilated back panel and bottle pockets.",
+    "category": "bags",
+    "tags": ["hiking", "backpack", "travel"]
+  },
+  {
+    "id": "d0a4b9c1-cec2-428d-ab60-9df0b700cdff",
+    "name": "Harbor Market Tote",
+    "description": "Durable recycled-cotton tote for groceries, books, and daily errands.",
+    "category": "bags",
+    "tags": ["tote", "reusable", "cotton"]
+  },
+  {
+    "id": "9770744f-82b3-4a2f-af62-9f4ee02ac0ad",
+    "name": "Glacier Steel Bottle",
+    "description": "Insulated stainless steel water bottle that keeps drinks cold all day.",
+    "category": "outdoors",
+    "tags": ["hydration", "insulated", "camping"]
+  },
+  {
+    "id": "717e5f83-da52-4fc4-b159-acddb8708e05",
+    "name": "Dawn Ceramic Mug",
+    "description": "Hand-finished ceramic coffee mug with a comfortable oversized handle.",
+    "category": "home",
+    "tags": ["coffee", "ceramic", "kitchen"]
+  },
+  {
+    "id": "9b913163-0196-4c75-9ed6-5ad165567f7a",
+    "name": "Orbit Desk Lamp",
+    "description": "Dimmable LED desk lamp with warm light for focused evening work.",
+    "category": "home",
+    "tags": ["lighting", "office", "led"]
+  },
+  {
+    "id": "24d6c62c-aa0f-4274-89ed-342190ef3f04",
+    "name": "Alpaca Cloud Throw",
+    "description": "Soft woven throw blanket for cool evenings on the sofa.",
+    "category": "home",
+    "tags": ["blanket", "cozy", "living-room"]
+  },
+  {
+    "id": "15bb3770-64e5-4292-800b-3dcd5402613e",
+    "name": "Echo Wireless Headphones",
+    "description": "Over-ear wireless headphones with active noise cancellation and long battery life.",
+    "category": "electronics",
+    "tags": ["audio", "wireless", "travel"]
+  },
+  {
+    "id": "e73c58f7-3dc1-4408-8902-fd74b7f10b82",
+    "name": "Cedar Mechanical Keyboard",
+    "description": "Compact mechanical keyboard with quiet tactile switches for coding.",
+    "category": "electronics",
+    "tags": ["keyboard", "office", "programming"]
+  },
+  {
+    "id": "8198c632-ecd0-4c3b-9f47-2ea67f34dbdb",
+    "name": "Pebble Bluetooth Speaker",
+    "description": "Portable waterproof speaker for picnics, showers, and pool days.",
+    "category": "electronics",
+    "tags": ["audio", "portable", "waterproof"]
+  },
+  {
+    "id": "f70b7dc8-8717-4be7-ad85-08e9704d8a45",
+    "name": "Northwind Rain Jacket",
+    "description": "Packable waterproof shell for windy commutes and sudden rain.",
+    "category": "apparel",
+    "tags": ["rain", "jacket", "outdoors"]
+  },
+  {
+    "id": "89667a58-8962-45b6-9a37-c64c0605e6ee",
+    "name": "Field Organic Tee",
+    "description": "Soft organic cotton t-shirt designed for everyday layering.",
+    "category": "apparel",
+    "tags": ["tshirt", "cotton", "basics"]
+  },
+  {
+    "id": "cb924d89-72ac-44e7-b457-a57adc059263",
+    "name": "Merino Trek Socks",
+    "description": "Temperature-regulating merino wool socks for long hikes.",
+    "category": "apparel",
+    "tags": ["socks", "hiking", "merino"]
+  },
+  {
+    "id": "d2a6c9cb-f9ad-44a9-af0b-12d50e689102",
+    "name": "Ember Cast Iron Pan",
+    "description": "Pre-seasoned cast iron skillet for searing vegetables and weekend breakfasts.",
+    "category": "kitchen",
+    "tags": ["cookware", "cast-iron", "cooking"]
+  },
+  {
+    "id": "38340c5a-2448-4cf9-8561-c17a77aadbd5",
+    "name": "Burr Coffee Grinder",
+    "description": "Adjustable burr grinder for fresh espresso and pour-over coffee.",
+    "category": "kitchen",
+    "tags": ["coffee", "grinder", "espresso"]
+  },
+  {
+    "id": "48ebacb3-3bdd-41bb-8906-e083aa6cedca",
+    "name": "Maple Cutting Board",
+    "description": "End-grain maple cutting board gentle on kitchen knives.",
+    "category": "kitchen",
+    "tags": ["kitchen", "wood", "prep"]
+  },
+  {
+    "id": "1acdcedb-62dd-4329-8b5c-e0f2efd5f20c",
+    "name": "River Cork Yoga Mat",
+    "description": "Natural cork yoga mat with a non-slip surface for home practice.",
+    "category": "fitness",
+    "tags": ["yoga", "cork", "wellness"]
+  },
+  {
+    "id": "7ef40815-2804-4710-9efb-dedd6222f17d",
+    "name": "Flex Resistance Band Set",
+    "description": "Five resistance bands for compact strength workouts at home or while traveling.",
+    "category": "fitness",
+    "tags": ["exercise", "strength", "travel"]
+  },
+  {
+    "id": "5cb82c8f-7af4-40e3-be2e-d3e1d0646faf",
+    "name": "Moonstone Dot Journal",
+    "description": "Lay-flat dotted notebook for planning, sketching, and daily notes.",
+    "category": "stationery",
+    "tags": ["notebook", "planning", "paper"]
+  },
+  {
+    "id": "0cbb7644-1214-4a9f-a708-a68e86c43686",
+    "name": "Sable Fountain Pen",
+    "description": "Refillable fountain pen with a smooth fine nib for handwritten letters.",
+    "category": "stationery",
+    "tags": ["pen", "writing", "refillable"]
+  },
+  {
+    "id": "6fcdd098-7b73-4c4c-9a1a-147d754c6d87",
+    "name": "Fern Desktop Planter",
+    "description": "Small ceramic planter with a drainage tray for bright workspaces.",
+    "category": "home",
+    "tags": ["plants", "ceramic", "desk"]
+  },
+  {
+    "id": "bc48fbed-4ddb-4a28-aa86-91c517e87c28",
+    "name": "Fix-It Home Toolkit",
+    "description": "Essential compact toolkit with screwdriver bits, hammer, tape measure, and pliers.",
+    "category": "hardware",
+    "tags": ["tools", "repair", "home"]
+  },
+  {
+    "id": "90336b70-2d77-4e85-9fa5-07966044a1f2",
+    "name": "Volt Travel Charger",
+    "description": "Compact USB-C wall charger for phones, tablets, and lightweight laptops.",
+    "category": "electronics",
+    "tags": ["charger", "usb-c", "travel"]
+  }
+]

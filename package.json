@@ -1,0 +1,28 @@
+{
+  "name": "serverless-search-engine-dynamo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "9.35.0",
+    "@types/node": "24.3.1",
+    "eslint": "9.35.0",
+    "eslint-plugin-better-max-params": "1.0.0",
+    "eslint-plugin-no-comments": "1.2.1",
+    "prettier": "3.6.2",
+    "typescript": "5.9.2",
+    "typescript-eslint": "8.42.0",
+    "vitest": "3.2.4"
+  }
+}
