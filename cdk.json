@@ -1,0 +1,7 @@
+{
+  "app": "npx tsx infra/bin/app.ts",
+  "context": {
+    "stage": "prod",
+    "frontendOrigin": "http://localhost:5173"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@serverless-search/infra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "3.1127.0",
+    "@aws-sdk/client-dynamodb": "3.1127.0",
+    "@aws-sdk/lib-dynamodb": "3.1127.0",
+    "@serverless-search/shared": "*",
+    "aws-cdk-lib": "2.268.0",
+    "cdk-nag": "2.38.2",
+    "constructs": "10.8.1"
+  }
+}

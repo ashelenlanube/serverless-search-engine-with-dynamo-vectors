@@ -4,10 +4,16 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "infra"
   ],
   "scripts": {
     "build": "tsc --build",
+    "cdk": "cdk --app \"npx tsx infra/bin/app.ts\"",
+    "cdk:deploy": "npm run cdk -- deploy --outputs-file cdk-outputs.json",
+    "cdk:destroy": "npm run cdk -- destroy",
+    "cdk:synth": "npm run cdk -- synth",
+    "seed": "tsx scripts/seed.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
@@ -16,13 +22,17 @@
   },
   "devDependencies": {
     "@eslint/js": "9.35.0",
+    "@types/aws-lambda": "8.10.163",
     "@types/node": "24.3.1",
+    "aws-cdk": "2.1140.0",
+    "esbuild": "0.28.2",
     "eslint": "9.35.0",
     "eslint-plugin-better-max-params": "1.0.0",
     "eslint-plugin-no-comments": "1.2.1",
     "prettier": "3.6.2",
     "typescript": "5.9.2",
     "typescript-eslint": "8.42.0",
+    "tsx": "4.23.13",
     "vitest": "3.2.4"
   }
 }

@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
+  },
+  "references": [{ "path": "../packages/shared" }],
+  "include": ["bin/**/*.ts", "constructs/**/*.ts", "functions/**/*.ts", "lib/**/*.ts"],
+  "exclude": ["test/**/*.ts"]
+}
