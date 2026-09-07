@@ -2,7 +2,6 @@ const combiningMarks = /\p{M}/gu;
 const punctuationOrSymbols = /[^\p{L}\p{N}\s]/gu;
 const whitespace = /\s+/gu;
 
-/** Produces the stable comparison and embedding text form defined by the project plan. */
 export function normalizeText(value: string): string {
   return value
     .normalize('NFKD')

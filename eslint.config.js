@@ -1,12 +1,18 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import { defineConfig } from 'eslint/config';
-import noComments from "eslint-plugin-no-comments";
-import betterMaxParams from "eslint-plugin-better-max-params";
+import noComments from 'eslint-plugin-no-comments';
+import betterMaxParams from 'eslint-plugin-better-max-params';
 
 export default defineConfig(
   {
-    ignores: ['**/coverage/**', '**/dist/**', '**/node_modules/**', 'eslint.config.js'],
+    ignores: [
+      '**/coverage/**',
+      '**/dist/**',
+      '**/cdk.out/**',
+      '**/node_modules/**',
+      'eslint.config.js',
+    ],
   },
   eslint.configs.recommended,
   tseslint.configs.recommended,
@@ -38,14 +44,13 @@ export default defineConfig(
           ignoreArrayIndexes: true,
         },
       ],
-      'complexity': ['error', 10],
+      complexity: ['error', 10],
       'max-depth': ['error', 4],
       'max-statements': ['error', 20],
       'max-classes-per-file': ['error', 1],
       'no-console': 'error',
       'id-length': ['error', { min: 2 }],
-      'eqeqeq': ['error', 'always'],
+      eqeqeq: ['error', 'always'],
     },
   },
-
 );

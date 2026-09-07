@@ -1,15 +1,28 @@
 import { z } from 'zod';
 
+const PRODUCT_NAME_MAX_LENGTH = 160;
+const PRODUCT_DESCRIPTION_MAX_LENGTH = 2_000;
+const PRODUCT_CATEGORY_MAX_LENGTH = 80;
+const PRODUCT_TAG_MAX_LENGTH = 60;
+const PRODUCT_TAGS_MAX_COUNT = 20;
+const PRODUCT_IMAGE_URL_MAX_LENGTH = 2_048;
+const RESPONSE_MAX_ITEMS = 5;
+const SEARCH_QUERY_MIN_LENGTH = 2;
+const SEARCH_QUERY_MAX_LENGTH = 100;
+
 export const productIdSchema = z.string().uuid();
 
 export const productInputSchema = z
   .object({
     id: productIdSchema,
-    name: z.string().trim().min(1).max(160),
-    description: z.string().trim().min(1).max(2_000),
-    category: z.string().trim().min(1).max(80),
-    tags: z.array(z.string().trim().min(1).max(60)).min(1).max(20),
-    imageUrl: z.string().trim().min(1).max(2_048).optional(),
+    name: z.string().trim().min(1).max(PRODUCT_NAME_MAX_LENGTH),
+    description: z.string().trim().min(1).max(PRODUCT_DESCRIPTION_MAX_LENGTH),
+    category: z.string().trim().min(1).max(PRODUCT_CATEGORY_MAX_LENGTH),
+    tags: z
+      .array(z.string().trim().min(1).max(PRODUCT_TAG_MAX_LENGTH))
+      .min(1)
+      .max(PRODUCT_TAGS_MAX_COUNT),
+    imageUrl: z.string().trim().min(1).max(PRODUCT_IMAGE_URL_MAX_LENGTH).optional(),
   })
   .strict();
 
@@ -36,12 +49,12 @@ export const searchSuggestionSchema = productSuggestionSchema.extend({
 });
 
 export const popularResponseSchema = z.object({
-  items: z.array(productSuggestionSchema).max(5),
+  items: z.array(productSuggestionSchema).max(RESPONSE_MAX_ITEMS),
 });
 
 export const searchResponseSchema = z.object({
-  query: z.string().min(2).max(100),
-  items: z.array(searchSuggestionSchema).max(5),
+  query: z.string().min(SEARCH_QUERY_MIN_LENGTH).max(SEARCH_QUERY_MAX_LENGTH),
+  items: z.array(searchSuggestionSchema).max(RESPONSE_MAX_ITEMS),
 });
 
 export const clickResponseSchema = z.object({

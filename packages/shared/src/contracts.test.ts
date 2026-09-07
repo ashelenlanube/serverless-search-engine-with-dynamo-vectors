@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { productInputSchema, searchResponseSchema } from './contracts.js';
 
+const PUBLIC_EMBEDDING_VALUE = 0.1;
+const TOO_MANY_SEARCH_ITEMS = 6;
+const MIN_CATALOG_PRODUCTS = 20;
+const MAX_CATALOG_PRODUCTS = 50;
+
 describe('API contracts', () => {
   it('accepts a valid seed product', () => {
     expect(
@@ -36,21 +41,25 @@ describe('API contracts', () => {
         category: 'footwear',
         tags: ['running'],
         imageUrl: '/products/cloud-runner.webp',
-        embedding: [0.1],
+        embedding: [PUBLIC_EMBEDDING_VALUE],
       }),
     ).toThrow();
   });
 
   it('keeps public search responses to five results', () => {
     expect(() =>
-      searchResponseSchema.parse({ query: 'shoes', items: Array(6).fill({}) }),
+      searchResponseSchema.parse({ query: 'shoes', items: Array(TOO_MANY_SEARCH_ITEMS).fill({}) }),
     ).toThrow();
   });
 
   it('validates the committed seed catalog and keeps product IDs unique', () => {
     const dataFile = new URL('../../../data/products.json', import.meta.url);
     const products: unknown = JSON.parse(readFileSync(dataFile, 'utf8'));
-    const catalog = productInputSchema.array().min(20).max(50).parse(products);
+    const catalog = productInputSchema
+      .array()
+      .min(MIN_CATALOG_PRODUCTS)
+      .max(MAX_CATALOG_PRODUCTS)
+      .parse(products);
 
     expect(new Set(catalog.map((product) => product.id)).size).toBe(catalog.length);
   });

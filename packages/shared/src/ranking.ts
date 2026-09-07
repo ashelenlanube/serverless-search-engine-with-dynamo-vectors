@@ -1,5 +1,12 @@
 import { normalizeText, tokenizeNormalizedText } from './normalization.js';
 
+const EXACT_NAME_SCORE = 1;
+const PREFIX_NAME_SCORE = 0.85;
+const DESCRIPTION_MATCH_SCORE = 0.7;
+const ALL_TOKEN_MATCH_SCORE = 0.55;
+const PARTIAL_TOKEN_MATCH_SCORE = 0.35;
+const MAX_COSINE_DISTANCE = 2;
+
 export const RANKING_WEIGHTS = {
   lexical: 0.5,
   semantic: 0.45,
@@ -27,22 +34,22 @@ export function lexicalScore(
 ): number {
   const normalizedQuery = normalizeText(query);
   if (!normalizedQuery) return 0;
-  if (candidate.normalizedName === normalizedQuery) return 1;
-  if (candidate.normalizedName.startsWith(normalizedQuery)) return 0.85;
+  if (candidate.normalizedName === normalizedQuery) return EXACT_NAME_SCORE;
+  if (candidate.normalizedName.startsWith(normalizedQuery)) return PREFIX_NAME_SCORE;
 
   const description = normalizeText(candidate.description);
-  if (description.includes(normalizedQuery)) return 0.7;
+  if (description.includes(normalizedQuery)) return DESCRIPTION_MATCH_SCORE;
 
   const tokens = tokenizeNormalizedText(normalizedQuery);
   const matchingTokens = tokens.filter((token) => description.includes(token)).length;
-  if (matchingTokens === tokens.length) return 0.55;
-  if (matchingTokens > 0) return 0.35;
+  if (matchingTokens === tokens.length) return ALL_TOKEN_MATCH_SCORE;
+  if (matchingTokens > 0) return PARTIAL_TOKEN_MATCH_SCORE;
   return 0;
 }
 
 export function semanticScoreFromCosineDistance(distance: number | undefined): number {
   if (distance === undefined || !Number.isFinite(distance)) return 0;
-  return Math.min(1, Math.max(0, 1 - distance / 2));
+  return Math.min(EXACT_NAME_SCORE, Math.max(0, EXACT_NAME_SCORE - distance / MAX_COSINE_DISTANCE));
 }
 
 export function popularityScore(score: number, maxScore: number): number {
