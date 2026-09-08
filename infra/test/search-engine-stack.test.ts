@@ -29,6 +29,10 @@ describe('SearchEngineStack', () => {
     template.hasResourceProperties('AWS::ApiGatewayV2::Api', {
       CorsConfiguration: Match.objectLike({ AllowOrigins: ['http://localhost:5173'] }),
     });
+    template.hasResourceProperties('AWS::ApiGatewayV2::Stage', {
+      AutoDeploy: true,
+      StageName: '$default',
+    });
     template.hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Statement: Match.arrayWith([

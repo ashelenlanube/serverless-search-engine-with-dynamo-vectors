@@ -193,6 +193,7 @@ export class SearchEngineStack extends cdk.Stack {
     });
     new apigatewayv2.HttpStage(this, 'DefaultStage', {
       httpApi: api,
+      autoDeploy: true,
       accessLogSettings: {
         destination: new apigatewayv2.LogGroupLogDestination(apiAccessLogs),
         format: apigateway.AccessLogFormat.jsonWithStandardFields(),
