@@ -65,7 +65,7 @@ export class SearchEngineStack extends cdk.Stack {
     isDemoStage: boolean,
     removalPolicy: cdk.RemovalPolicy,
   ): dynamodb.Table {
-    const table = new dynamodb.Table(this, 'ProductsTable', {
+    const table = new dynamodb.Table(this, 'ProductsTableV2', {
       partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       encryption: dynamodb.TableEncryption.AWS_MANAGED,
@@ -78,30 +78,14 @@ export class SearchEngineStack extends cdk.Stack {
       partitionKey: { name: 'nameInitial', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'normalizedName', type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.INCLUDE,
-      nonKeyAttributes: [
-        'name',
-        'normalizedName',
-        'description',
-        'category',
-        'tags',
-        'imageUrl',
-        'score',
-      ],
+      nonKeyAttributes: ['name', 'description', 'category', 'tags', 'score'],
     });
     table.addGlobalSecondaryIndex({
       indexName: POPULARITY_INDEX,
       partitionKey: { name: 'popularityKey', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'score', type: dynamodb.AttributeType.NUMBER },
       projectionType: dynamodb.ProjectionType.INCLUDE,
-      nonKeyAttributes: [
-        'name',
-        'normalizedName',
-        'description',
-        'category',
-        'tags',
-        'imageUrl',
-        'score',
-      ],
+      nonKeyAttributes: ['name', 'normalizedName', 'description', 'category', 'tags'],
     });
 
     new DynamoDbVectorIndex(this, 'ProductEmbeddingVectorIndex', {
@@ -110,15 +94,7 @@ export class SearchEngineStack extends cdk.Stack {
       vectorAttribute: 'embedding',
       dimensions: VECTOR_DIMENSIONS,
       distanceFunction: 'COSINE',
-      projectedAttributes: [
-        'name',
-        'normalizedName',
-        'description',
-        'category',
-        'tags',
-        'imageUrl',
-        'score',
-      ],
+      projectedAttributes: ['name', 'normalizedName', 'description', 'category', 'tags', 'score'],
     });
 
     return table;
