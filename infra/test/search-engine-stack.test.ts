@@ -26,6 +26,29 @@ describe('SearchEngineStack', () => {
       DistanceFunction: 'COSINE',
     });
     template.hasResourceProperties('AWS::Lambda::Function', { Runtime: 'nodejs24.x' });
+    template.hasResourceProperties('AWS::ApiGatewayV2::Api', {
+      CorsConfiguration: Match.objectLike({ AllowOrigins: ['http://localhost:5173'] }),
+    });
+    template.hasResourceProperties('AWS::IAM::Policy', {
+      PolicyDocument: {
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: Match.arrayWith(['dynamodb:Query', 'dynamodb:SearchVectors']),
+            Effect: 'Allow',
+          }),
+        ]),
+      },
+    });
+    template.hasResourceProperties('AWS::IAM::Policy', {
+      PolicyDocument: {
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: 'bedrock:InvokeModel',
+            Effect: 'Allow',
+          }),
+        ]),
+      },
+    });
     template.resourceCountIs('AWS::ApiGatewayV2::Route', API_ROUTE_COUNT);
   });
 });

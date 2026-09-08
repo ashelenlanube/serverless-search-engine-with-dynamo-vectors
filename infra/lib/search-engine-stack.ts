@@ -78,14 +78,30 @@ export class SearchEngineStack extends cdk.Stack {
       partitionKey: { name: 'nameInitial', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'normalizedName', type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.INCLUDE,
-      nonKeyAttributes: ['name', 'normalizedName', 'description', 'category', 'tags', 'score'],
+      nonKeyAttributes: [
+        'name',
+        'normalizedName',
+        'description',
+        'category',
+        'tags',
+        'imageUrl',
+        'score',
+      ],
     });
     table.addGlobalSecondaryIndex({
       indexName: POPULARITY_INDEX,
       partitionKey: { name: 'popularityKey', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'score', type: dynamodb.AttributeType.NUMBER },
       projectionType: dynamodb.ProjectionType.INCLUDE,
-      nonKeyAttributes: ['name', 'normalizedName', 'description', 'category', 'tags', 'score'],
+      nonKeyAttributes: [
+        'name',
+        'normalizedName',
+        'description',
+        'category',
+        'tags',
+        'imageUrl',
+        'score',
+      ],
     });
 
     new DynamoDbVectorIndex(this, 'ProductEmbeddingVectorIndex', {
@@ -94,7 +110,15 @@ export class SearchEngineStack extends cdk.Stack {
       vectorAttribute: 'embedding',
       dimensions: VECTOR_DIMENSIONS,
       distanceFunction: 'COSINE',
-      projectedAttributes: ['name', 'normalizedName', 'description', 'category', 'tags', 'score'],
+      projectedAttributes: [
+        'name',
+        'normalizedName',
+        'description',
+        'category',
+        'tags',
+        'imageUrl',
+        'score',
+      ],
     });
 
     return table;
