@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "workspaces": [
+    "apps/*",
     "packages/*",
     "infra"
   ],
@@ -14,6 +15,8 @@
     "cdk:destroy": "npm run cdk -- destroy",
     "cdk:synth": "npm run cdk -- synth",
     "seed": "tsx scripts/seed.ts",
+    "dev:web": "npm run dev --workspace @serverless-search/web",
+    "build:web": "npm run build --workspace @serverless-search/web",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",

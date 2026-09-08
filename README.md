@@ -16,6 +16,25 @@ npm run format:check
 npm run cdk:synth
 ```
 
+## Run the frontend locally
+
+The frontend is deliberately local-only. Deploy and seed the backend first, then copy
+the `ApiUrl` stack output into a local environment file:
+
+```bash
+cp apps/web/.env.example apps/web/.env.local
+```
+
+Set `VITE_API_BASE_URL` in `apps/web/.env.local` to the deployed API URL, then run:
+
+```bash
+npm run dev:web
+```
+
+Vite serves the app at `http://localhost:5173`. The frontend fails with a clear
+configuration error in development if `VITE_API_BASE_URL` is absent. The local
+environment file is ignored by Git.
+
 ## Deploy and seed
 
 Deploy only after configuring AWS credentials in a Region with access to Titan Text Embeddings V2:
