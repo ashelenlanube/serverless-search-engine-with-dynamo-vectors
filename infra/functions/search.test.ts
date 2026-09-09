@@ -32,6 +32,7 @@ function dependencies() {
     bedrock: { send: vi.fn().mockResolvedValue(body({ embedding })) },
     document: { send: vi.fn().mockResolvedValue({ Items: [product] }) },
     dynamo: { send: vi.fn().mockResolvedValue({ SearchResults: [] }) },
+    logger: { error: vi.fn() },
     tableName: 'Products',
     vectorIndex: 'ProductEmbeddingIndex',
   };
@@ -97,6 +98,13 @@ describe('search handler', () => {
 
     expect(response).toMatchObject({ statusCode: 200 });
     expect(JSON.parse(response.body ?? '').items[0].match.kind).toBe('lexical');
+    expect(services.logger.error).toHaveBeenCalledWith({
+      operation: 'semantic-search',
+      errorName: 'Error',
+      errorMessage: 'Bedrock unavailable',
+      tableName: 'Products',
+      vectorIndex: 'ProductEmbeddingIndex',
+    });
   });
 
   it('rejects empty, short, and overlong normalized queries', async () => {

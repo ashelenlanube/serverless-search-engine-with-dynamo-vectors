@@ -19,8 +19,26 @@ interface SearchDependencies {
   readonly bedrock: Pick<BedrockRuntimeClient, 'send'>;
   readonly document: Pick<DynamoDBDocumentClient, 'send'>;
   readonly dynamo: Pick<DynamoDBClient, 'send'>;
+  readonly logger: SearchLogger;
   readonly tableName: string;
   readonly vectorIndex: string;
+}
+
+interface SearchLogger {
+  error(event: SearchErrorEvent): void;
+}
+
+interface SearchErrorEvent {
+  readonly errorMessage: string;
+  readonly errorName: string;
+  readonly operation: 'lexical-search' | 'semantic-search';
+  readonly tableName: string;
+  readonly vectorIndex: string;
+}
+
+interface RejectedResultOptions<T> {
+  readonly operation: SearchErrorEvent['operation'];
+  readonly result: PromiseSettledResult<T>;
 }
 
 interface VectorCandidate {
@@ -42,6 +60,8 @@ export function createHandler(dependencies: SearchDependencies): SearchHandler {
     const lexical = lexicalCandidates(dependencies, query);
     const semantic = semanticCandidates(dependencies, query);
     const [lexicalResult, semanticResult] = await Promise.allSettled([lexical, semantic]);
+    logRejected(dependencies, { operation: 'lexical-search', result: lexicalResult });
+    logRejected(dependencies, { operation: 'semantic-search', result: semanticResult });
     if (lexicalResult.status === 'rejected' && semanticResult.status === 'rejected') {
       return json(HTTP_STATUS.serverError, { message: 'Unable to search products.' });
     }
@@ -68,6 +88,19 @@ export function createHandler(dependencies: SearchDependencies): SearchHandler {
       });
     return json(HTTP_STATUS.success, { query, items });
   };
+}
+
+function logRejected<T>(dependencies: SearchDependencies, options: RejectedResultOptions<T>): void {
+  if (options.result.status !== 'rejected') return;
+  const reason = options.result.reason;
+  const error = reason instanceof Error ? reason : new Error(String(reason));
+  dependencies.logger.error({
+    operation: options.operation,
+    errorName: error.name,
+    errorMessage: error.message,
+    tableName: dependencies.tableName,
+    vectorIndex: dependencies.vectorIndex,
+  });
 }
 
 async function lexicalCandidates(
@@ -166,11 +199,15 @@ function mergeCandidates(
 const tableName = process.env.TABLE_NAME;
 const vectorIndex = process.env.VECTOR_INDEX;
 const dynamo = new DynamoDBClient({});
+const logger: SearchLogger = {
+  error: (event) => process.stderr.write(`${JSON.stringify(event)}\n`),
+};
 
 export const handler = createHandler({
   bedrock: new BedrockRuntimeClient({}),
   document: DynamoDBDocumentClient.from(dynamo),
   dynamo,
+  logger,
   tableName: tableName ?? '',
   vectorIndex: vectorIndex ?? '',
 });
