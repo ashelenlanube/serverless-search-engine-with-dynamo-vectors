@@ -65,7 +65,7 @@ export class SearchEngineStack extends cdk.Stack {
     isDemoStage: boolean,
     removalPolicy: cdk.RemovalPolicy,
   ): dynamodb.Table {
-    const table = new dynamodb.Table(this, 'ProductsTableV2', {
+    const table = new dynamodb.Table(this, 'ProductsTable', {
       partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       encryption: dynamodb.TableEncryption.AWS_MANAGED,
@@ -131,7 +131,7 @@ export class SearchEngineStack extends cdk.Stack {
     functions.search.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ['dynamodb:Query', 'dynamodb:SearchVectors'],
-        resources: [table.tableArn, `${table.tableArn}/index/${AUTOCOMPLETE_INDEX}`],
+        resources: [table.tableArn, `${table.tableArn}/index/${AUTOCOMPLETE_INDEX}`, `${table.tableArn}/index/${VECTOR_INDEX}`],
       }),
     );
     functions.search.addToRolePolicy(
@@ -256,7 +256,7 @@ export class SearchEngineStack extends cdk.Stack {
       memorySize: FUNCTION_MEMORY_SIZE_MIB,
       logGroup,
       environment: { TABLE_NAME: options.table.tableName, ...options.extraEnvironment },
-      bundling: { minify: true, sourceMap: true },
+      bundling: { minify: true, sourceMap: true, externalModules: [] },
     });
   }
 }
