@@ -5,6 +5,7 @@ type RawProduct = Record<string, unknown>;
 
 export function productSuggestion(value: object): ProductSuggestion | undefined {
   const product = value as RawProduct;
+
   if (
     typeof product.id !== 'string' ||
     typeof product.name !== 'string' ||

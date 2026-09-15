@@ -21,12 +21,12 @@ describe('popular handler', () => {
   it('queries the popularity index in descending order and clamps the limit', async () => {
     const send = vi.fn().mockResolvedValue({ Items: [product] });
     const handler = createHandler({ document: { send }, tableName: 'Products' });
-
     const response = await handler(event('99'));
 
     expect(response).toMatchObject({ statusCode: 200 });
     expect(JSON.parse(response.body ?? '')).toEqual({ items: [product] });
     const command = send.mock.calls[0]?.[0] as QueryCommand;
+
     expect(command.input).toMatchObject({
       TableName: 'Products',
       IndexName: 'PopularityIndex',
@@ -38,7 +38,6 @@ describe('popular handler', () => {
   it('returns a generic error when DynamoDB fails', async () => {
     const send = vi.fn().mockRejectedValue(new Error('unavailable'));
     const handler = createHandler({ document: { send }, tableName: 'Products' });
-
     const response = await handler(event());
 
     expect(response).toMatchObject({ statusCode: 500 });

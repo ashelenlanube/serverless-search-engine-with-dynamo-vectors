@@ -13,7 +13,6 @@ const PRODUCT: ProductSuggestion = {
   score: 1,
   imageUrl: '/products/cloud-runner.webp',
 };
-
 const SECOND_PRODUCT: ProductSuggestion = {
   ...PRODUCT,
   id: 'dc8a0ab5-b818-46d7-b13a-25742bd6f721',
@@ -34,6 +33,7 @@ describe('SearchBox', () => {
   it('loads popular products when an empty input receives focus', async () => {
     const api = createApi();
     const user = userEvent.setup();
+
     render(<SearchBox api={api} />);
 
     await user.click(screen.getByRole('combobox'));
@@ -45,6 +45,7 @@ describe('SearchBox', () => {
   it('debounces a burst of typed search input', async () => {
     const api = createApi();
     const user = userEvent.setup();
+
     render(<SearchBox api={api} />);
 
     await user.type(screen.getByRole('combobox'), 'shoes');
@@ -65,8 +66,10 @@ describe('SearchBox', () => {
           );
         }),
     );
+
     api.search = search;
     const user = userEvent.setup();
+
     render(<SearchBox api={api} />);
 
     await user.type(screen.getByRole('combobox'), 'shoes');
@@ -79,6 +82,7 @@ describe('SearchBox', () => {
   it('selects the active product with Enter and records one click', async () => {
     const api = createApi();
     const user = userEvent.setup();
+
     render(<SearchBox api={api} />);
 
     await user.click(screen.getByRole('combobox'));
@@ -90,13 +94,16 @@ describe('SearchBox', () => {
 
   it('moves through products with ArrowDown and ArrowUp', async () => {
     const api = createApi();
+
     vi.mocked(api.getPopular).mockResolvedValue({ items: [PRODUCT, SECOND_PRODUCT] });
     const user = userEvent.setup();
+
     render(<SearchBox api={api} />);
     const input = screen.getByRole('combobox');
 
     await user.click(input);
     const options = await screen.findAllByRole('option');
+
     expect(options[0]?.getAttribute('aria-selected')).toBe('true');
 
     await user.keyboard('{ArrowDown}');
@@ -109,6 +116,7 @@ describe('SearchBox', () => {
 
   it('closes the menu when Escape is pressed', async () => {
     const api = createApi();
+
     render(<SearchBox api={api} />);
     const input = screen.getByRole('combobox');
 

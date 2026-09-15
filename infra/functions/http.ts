@@ -22,6 +22,7 @@ export function json(statusCode: number, body: unknown): APIGatewayProxyStructur
 export function limitFromQuery(value: string | undefined): number {
   if (!value) return DEFAULT_LIMIT;
   const parsed = Number(value);
+
   if (!Number.isInteger(parsed)) return DEFAULT_LIMIT;
   return Math.min(MAXIMUM_LIMIT, Math.max(MINIMUM_LIMIT, parsed));
 }

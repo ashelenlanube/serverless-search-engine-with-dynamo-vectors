@@ -102,11 +102,13 @@ function parseOptions(args: readonly string[]): SeedOptions {
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
     const flagOption = flagOptions[argument];
+
     if (flagOption) {
       flagOption();
       continue;
     }
     const valueOption = valueOptions[argument];
+
     if (!valueOption) usage();
     valueOption(args[++index] ?? usage());
   }
@@ -162,6 +164,7 @@ async function waitForActiveVectorIndex(client: DynamoDBClient, target: SeedTarg
 
 function isRetryable(error: unknown): boolean {
   const name = error instanceof Error ? error.name : undefined;
+
   return (
     name === 'ThrottlingException' ||
     name === 'ServiceUnavailableException' ||
@@ -182,6 +185,7 @@ async function embed({ client, inputText, attempt = 0 }: EmbeddingOptions): Prom
       }),
     );
     const body = JSON.parse(new TextDecoder().decode(response.body)) as { embedding?: unknown };
+
     if (!Array.isArray(body.embedding) || body.embedding.length !== EMBEDDING_DIMENSIONS) {
       throw new Error(
         `Titan returned an embedding with ${Array.isArray(body.embedding) ? body.embedding.length : 0} dimensions.`,
@@ -190,11 +194,13 @@ async function embed({ client, inputText, attempt = 0 }: EmbeddingOptions): Prom
     if (!body.embedding.every((value) => typeof value === 'number' && Number.isFinite(value))) {
       throw new Error('Titan returned an embedding containing a non-finite value.');
     }
+
     return body.embedding;
   } catch (error) {
     if (!isRetryable(error) || attempt >= MAX_EMBEDDING_RETRIES) throw error;
     const delayMs =
       RETRY_BASE_DELAY_MS * 2 ** attempt + Math.floor(Math.random() * MAX_RETRY_JITTER_MS);
+
     await new Promise<void>((resolveDelay) => setTimeout(resolveDelay, delayMs));
     return embed({ client, inputText, attempt: attempt + 1 });
   }
@@ -206,6 +212,7 @@ async function mapWithConcurrency<T>({
   worker,
 }: ConcurrentMapOptions<T>): Promise<void> {
   let nextIndex = 0;
+
   async function run(): Promise<void> {
     while (nextIndex < values.length) {
       await worker(values[nextIndex++]);
@@ -251,11 +258,13 @@ async function seedProduct({
       '#embedding': 'embedding',
       '#score': 'score',
     };
+
     if (product.imageUrl) {
       names['#imageUrl'] = 'imageUrl';
       setExpressions.push('#imageUrl = :imageUrl');
     }
     const removeExpression = product.imageUrl ? undefined : 'REMOVE #imageUrl';
+
     if (removeExpression) names['#imageUrl'] = 'imageUrl';
 
     const response = await document.send(
@@ -281,6 +290,7 @@ async function seedProduct({
         ReturnValues: 'ALL_OLD',
       }),
     );
+
     if (response.Attributes?.score === undefined) counts.inserted += 1;
     else counts.updated += 1;
   } catch (error) {
@@ -293,12 +303,14 @@ async function seedProduct({
 
 async function loadProducts(): Promise<ProductInput[]> {
   const catalogContents = await readFile(resolve('data/products.json'), 'utf8');
+
   return productInputSchema.array().min(1).parse(JSON.parse(catalogContents));
 }
 
 async function main(): Promise<void> {
   const options = parseOptions(process.argv.slice(2));
   const products = await loadProducts();
+
   if (options.dryRun) {
     process.stdout.write(
       `Validated ${products.length} products. Dry run makes no AWS calls or writes.\n`,
@@ -313,6 +325,7 @@ async function main(): Promise<void> {
   });
   const bedrock = new BedrockRuntimeClient({ region: options.region });
   const counts: SeedCounts = { inserted: 0, updated: 0, skipped: 0, failed: 0 };
+
   await waitForActiveVectorIndex(dynamo, target);
   await mapWithConcurrency({
     values: products,

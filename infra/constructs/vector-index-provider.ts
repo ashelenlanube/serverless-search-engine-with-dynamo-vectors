@@ -31,14 +31,17 @@ function requiredString(value: unknown, propertyName: string): string {
   if (typeof value !== 'string' || value.length === 0) {
     throw new Error(`${propertyName} must be a non-empty string.`);
   }
+
   return value;
 }
 
 function dimensions(value: unknown): number {
   const parsedValue = Number(value);
+
   if (!Number.isSafeInteger(parsedValue) || parsedValue <= 0) {
     throw new Error('Dimensions must be a positive integer.');
   }
+
   return parsedValue;
 }
 
@@ -46,12 +49,14 @@ function projectedAttributes(value: unknown): string[] {
   if (!Array.isArray(value) || !value.every((attribute) => typeof attribute === 'string')) {
     throw new Error('ProjectedAttributes must be an array of strings.');
   }
+
   return value;
 }
 
 function properties(event: ProviderEvent): VectorIndexProperties {
   const resourceProperties = event.ResourceProperties as Record<string, unknown>;
   const distanceFunction = requiredString(resourceProperties.DistanceFunction, 'DistanceFunction');
+
   if (
     distanceFunction !== 'COSINE' &&
     distanceFunction !== 'EUCLIDEAN' &&
@@ -59,6 +64,7 @@ function properties(event: ProviderEvent): VectorIndexProperties {
   ) {
     throw new Error('DistanceFunction must be COSINE, EUCLIDEAN, or DOT_PRODUCT.');
   }
+
   return {
     TableName: requiredString(resourceProperties.TableName, 'TableName'),
     IndexName: requiredString(resourceProperties.IndexName, 'IndexName'),
@@ -78,6 +84,7 @@ async function findIndex(
   props: VectorIndexProperties,
 ): Promise<VectorIndexDescription | undefined> {
   const response = await client.send(new DescribeTableCommand({ TableName: props.TableName }));
+
   return response.Table?.VectorIndexes?.find((index) => index.IndexName === props.IndexName);
 }
 
@@ -116,6 +123,7 @@ function isImmutableConfigurationChange(event: ProviderEvent): boolean {
   if (event.RequestType !== 'Update') return false;
   const current = properties(event);
   const previous = event.OldResourceProperties as unknown as VectorIndexProperties;
+
   return current.ConfigurationHash !== previous.ConfigurationHash;
 }
 

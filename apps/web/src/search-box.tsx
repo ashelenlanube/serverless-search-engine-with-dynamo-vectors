@@ -38,7 +38,6 @@ export function SearchBox({ api }: SearchBoxProperties): React.JSX.Element {
         clickInProgress.current = false;
       });
   };
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
@@ -62,7 +61,6 @@ export function SearchBox({ api }: SearchBoxProperties): React.JSX.Element {
       setIsOpen(false);
     }
   };
-
   const activeOptionId = activeItem ? `product-option-${activeItem.id}` : undefined;
   const isExpanded = isOpen && state.status !== 'idle';
 

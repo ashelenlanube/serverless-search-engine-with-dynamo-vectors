@@ -42,5 +42,6 @@ function statusMessage(state: ProductSearchState): string {
   if (state.items.length === 0) return 'No products found.';
 
   const label = state.mode === 'popular' ? 'popular products' : 'results';
+
   return `${state.items.length} ${label} available.`;
 }

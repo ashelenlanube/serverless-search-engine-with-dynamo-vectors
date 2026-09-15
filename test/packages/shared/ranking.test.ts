@@ -38,6 +38,7 @@ describe('ranking', () => {
         cosineDistance: EXACT_CANDIDATE_DISTANCE,
       },
     ]);
+
     expect(ranked.map((candidate) => candidate.id)).toEqual(['prod_exact', 'prod_semantic_only']);
   });
 
@@ -55,6 +56,7 @@ describe('ranking', () => {
       normalizedName: 'cloud runner shoes',
       description: 'Lightweight running shoes for warm weather training.',
     };
+
     expect(lexicalScore('warm weather', candidate)).toBe(DESCRIPTION_MATCH_SCORE);
     expect(lexicalScore('warm training', candidate)).toBe(ALL_TOKEN_MATCH_SCORE);
     expect(lexicalScore('winter training', candidate)).toBe(PARTIAL_TOKEN_MATCH_SCORE);
@@ -65,6 +67,7 @@ describe('ranking', () => {
       { id: 'prod_b', normalizedName: 'b', description: '', score: 1 },
       { id: 'prod_a', normalizedName: 'a', description: '', score: 1 },
     ]);
+
     expect(ranked.map((candidate) => candidate.id)).toEqual(['prod_a', 'prod_b']);
   });
 });

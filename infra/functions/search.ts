@@ -53,6 +53,7 @@ type SearchHandler = (
 export function createHandler(dependencies: SearchDependencies): SearchHandler {
   return async (event): Promise<APIGatewayProxyStructuredResultV2> => {
     const query = normalizeText(event.queryStringParameters?.q ?? '');
+
     if (query.length < 2 || query.length > QUERY_MAX_LENGTH) {
       return json(HTTP_STATUS.badRequest, { message: 'Invalid query.' });
     }
@@ -60,6 +61,7 @@ export function createHandler(dependencies: SearchDependencies): SearchHandler {
     const lexical = lexicalCandidates(dependencies, query);
     const semantic = semanticCandidates(dependencies, query);
     const [lexicalResult, semanticResult] = await Promise.allSettled([lexical, semantic]);
+
     logRejected(dependencies, { operation: 'lexical-search', result: lexicalResult });
     logRejected(dependencies, { operation: 'semantic-search', result: semanticResult });
     if (lexicalResult.status === 'rejected' && semanticResult.status === 'rejected') {
@@ -74,6 +76,7 @@ export function createHandler(dependencies: SearchDependencies): SearchHandler {
       .slice(0, limitFromQuery(event.queryStringParameters?.limit))
       .flatMap((candidate) => {
         const suggestion = productSuggestion(candidate);
+
         if (!suggestion) return [];
         return [
           {
@@ -86,6 +89,7 @@ export function createHandler(dependencies: SearchDependencies): SearchHandler {
           },
         ];
       });
+
     return json(HTTP_STATUS.success, { query, items });
   };
 }
@@ -94,6 +98,7 @@ function logRejected<T>(dependencies: SearchDependencies, options: RejectedResul
   if (options.result.status !== 'rejected') return;
   const reason = options.result.reason;
   const error = reason instanceof Error ? reason : new Error(String(reason));
+
   dependencies.logger.error({
     operation: options.operation,
     errorName: error.name,
@@ -116,8 +121,10 @@ async function lexicalCandidates(
       Limit: LEXICAL_CANDIDATE_LIMIT,
     }),
   );
+
   return (response.Items ?? []).flatMap((item) => {
     const candidate = candidateFromRaw(item);
+
     return candidate ? [candidate] : [];
   });
 }
@@ -135,9 +142,11 @@ async function semanticCandidates(
       TopK: SEMANTIC_CANDIDATE_LIMIT,
     }),
   );
+
   return (response.SearchResults ?? []).flatMap((result) => {
     if (!result.Item || typeof result.Score !== 'number') return [];
     const candidate = candidateFromRaw(rawProduct(result.Item));
+
     return candidate ? [{ candidate, cosineDistance: result.Score }] : [];
   });
 }
@@ -157,12 +166,14 @@ async function queryEmbedding(
     }),
   );
   const parsed = JSON.parse(new TextDecoder().decode(response.body)) as { embedding?: unknown };
+
   if (!Array.isArray(parsed.embedding) || parsed.embedding.length !== EMBEDDING_DIMENSIONS) {
     throw new Error('Titan returned an invalid embedding.');
   }
   if (!parsed.embedding.every((value) => typeof value === 'number' && Number.isFinite(value))) {
     throw new Error('Titan returned an invalid embedding.');
   }
+
   return parsed.embedding;
 }
 
@@ -175,6 +186,7 @@ function candidateFromRaw(value: Record<string, unknown>): RankingCandidate | un
   ) {
     return undefined;
   }
+
   return {
     id: value.id,
     normalizedName: value.normalizedName,
@@ -189,10 +201,12 @@ function mergeCandidates(
   semantic: readonly VectorCandidate[],
 ): RankingCandidate[] {
   const candidates = new Map<string, RankingCandidate>();
+
   for (const candidate of lexical) candidates.set(candidate.id, candidate);
   for (const { candidate, cosineDistance } of semantic) {
     candidates.set(candidate.id, { ...candidates.get(candidate.id), ...candidate, cosineDistance });
   }
+
   return [...candidates.values()];
 }
 

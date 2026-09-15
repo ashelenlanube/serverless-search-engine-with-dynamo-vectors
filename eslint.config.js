@@ -26,6 +26,24 @@ export default defineConfig(
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
       'no-comments/disallowComments': 'error',
+      'padding-line-between-statements': [
+        'error',
+        {
+          blankLine: 'always',
+          prev: ['const', 'let', 'var'],
+          next: '*',
+        },
+        {
+          blankLine: 'never',
+          prev: ['const', 'let', 'var'],
+          next: ['const', 'let', 'var'],
+        },
+        {
+          blankLine: 'always',
+          prev: 'block-like',
+          next: 'return',
+        },
+      ],
       'better-max-params/better-max-params': [
         'error',
         {

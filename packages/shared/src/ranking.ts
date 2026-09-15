@@ -33,15 +33,18 @@ export function lexicalScore(
   candidate: Pick<RankingCandidate, 'normalizedName' | 'description'>,
 ): number {
   const normalizedQuery = normalizeText(query);
+
   if (!normalizedQuery) return 0;
   if (candidate.normalizedName === normalizedQuery) return EXACT_NAME_SCORE;
   if (candidate.normalizedName.startsWith(normalizedQuery)) return PREFIX_NAME_SCORE;
 
   const description = normalizeText(candidate.description);
+
   if (description.includes(normalizedQuery)) return DESCRIPTION_MATCH_SCORE;
 
   const tokens = tokenizeNormalizedText(normalizedQuery);
   const matchingTokens = tokens.filter((token) => description.includes(token)).length;
+
   if (matchingTokens === tokens.length) return ALL_TOKEN_MATCH_SCORE;
   if (matchingTokens > 0) return PARTIAL_TOKEN_MATCH_SCORE;
   return 0;
@@ -68,6 +71,7 @@ export function rankCandidates(
       const lexical = lexicalScore(query, candidate);
       const semantic = semanticScoreFromCosineDistance(candidate.cosineDistance);
       const popularity = popularityScore(candidate.score, maxScore);
+
       return {
         ...candidate,
         lexicalScore: lexical,

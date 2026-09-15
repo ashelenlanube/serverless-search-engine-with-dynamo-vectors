@@ -18,6 +18,7 @@ type ClickHandler = (
 export function createHandler(dependencies: ClickDependencies): ClickHandler {
   return async (event): Promise<APIGatewayProxyStructuredResultV2> => {
     const id = event.pathParameters?.id;
+
     if (!productIdSchema.safeParse(id).success) {
       return json(HTTP_STATUS.badRequest, { message: 'Invalid product id.' });
     }
@@ -34,14 +35,17 @@ export function createHandler(dependencies: ClickDependencies): ClickHandler {
         }),
       );
       const score = response.Attributes?.score;
+
       if (typeof score !== 'number') {
         return json(HTTP_STATUS.serverError, { message: 'Unable to record product click.' });
       }
+
       return json(HTTP_STATUS.success, { id, score });
     } catch (error) {
       if (error instanceof Error && error.name === 'ConditionalCheckFailedException') {
         return json(HTTP_STATUS.notFound, { message: 'Product not found.' });
       }
+
       return json(HTTP_STATUS.serverError, { message: 'Unable to record product click.' });
     }
   };

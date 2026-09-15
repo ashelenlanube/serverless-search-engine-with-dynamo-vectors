@@ -32,8 +32,10 @@ export function createHandler(dependencies: PopularDependencies): PopularHandler
       );
       const items = (response.Items ?? []).flatMap((item) => {
         const suggestion = productSuggestion(item);
+
         return suggestion ? [suggestion] : [];
       });
+
       return json(HTTP_STATUS.success, { items });
     } catch {
       return json(HTTP_STATUS.serverError, { message: 'Unable to load popular products.' });

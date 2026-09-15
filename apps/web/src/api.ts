@@ -22,13 +22,16 @@ export class HttpProductApi implements ProductApi {
 
   public async getPopular(options: RequestOptions): Promise<PopularResponse> {
     const payload = await this.request('/popular?limit=5', { method: 'GET', ...options });
+
     return popularResponseSchema.parse(payload);
   }
 
   public async search(query: string, options: RequestOptions): Promise<SearchResponse> {
     const parameters = new URLSearchParams({ limit: '5' });
+
     parameters.set('q', query);
     const payload = await this.request(`/search?${parameters}`, { method: 'GET', ...options });
+
     return searchResponseSchema.parse(payload);
   }
 
@@ -37,6 +40,7 @@ export class HttpProductApi implements ProductApi {
       method: 'POST',
       ...options,
     });
+
     return clickResponseSchema.parse(payload);
   }
 

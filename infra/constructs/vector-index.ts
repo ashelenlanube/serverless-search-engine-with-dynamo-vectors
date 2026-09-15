@@ -41,11 +41,11 @@ export class DynamoDbVectorIndex extends Construct {
       timeout: cdk.Duration.minutes(1),
       bundling: { minify: true, sourceMap: true, externalModules: [] },
     });
-
     const policy = new iam.PolicyStatement({
       actions: ['dynamodb:DescribeTable', 'dynamodb:UpdateTable'],
       resources: [props.table.tableArn],
     });
+
     providerHandler.addToRolePolicy(policy);
     completionHandler.addToRolePolicy(policy);
 

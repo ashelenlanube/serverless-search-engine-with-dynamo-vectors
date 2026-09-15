@@ -55,8 +55,10 @@ export class SearchEngineStack extends cdk.Stack {
     const removalPolicy = isDemoStage ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN;
     const table = this.createProductsTable(isDemoStage, removalPolicy);
     const functions = this.createFunctions(table, removalPolicy);
+
     this.configureFunctionPermissions(functions, table);
     const api = this.createApi({ handlers: functions, frontendOrigin, removalPolicy });
+
     this.createOutputs(api, table);
     this.addNagSuppressions();
   }
@@ -73,6 +75,7 @@ export class SearchEngineStack extends cdk.Stack {
       removalPolicy,
       pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: true },
     });
+
     table.addGlobalSecondaryIndex({
       indexName: AUTOCOMPLETE_INDEX,
       partitionKey: { name: 'nameInitial', type: dynamodb.AttributeType.STRING },
@@ -131,7 +134,11 @@ export class SearchEngineStack extends cdk.Stack {
     functions.search.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ['dynamodb:Query', 'dynamodb:SearchVectors'],
-        resources: [table.tableArn, `${table.tableArn}/index/${AUTOCOMPLETE_INDEX}`, `${table.tableArn}/index/${VECTOR_INDEX}`],
+        resources: [
+          table.tableArn,
+          `${table.tableArn}/index/${AUTOCOMPLETE_INDEX}`,
+          `${table.tableArn}/index/${VECTOR_INDEX}`,
+        ],
       }),
     );
     functions.search.addToRolePolicy(
@@ -167,6 +174,7 @@ export class SearchEngineStack extends cdk.Stack {
       retention: logs.RetentionDays.ONE_WEEK,
       removalPolicy: options.removalPolicy,
     });
+
     new apigatewayv2.HttpStage(this, 'DefaultStage', {
       httpApi: api,
       autoDeploy: true,
@@ -248,6 +256,7 @@ export class SearchEngineStack extends cdk.Stack {
       retention: logs.RetentionDays.ONE_WEEK,
       removalPolicy: options.removalPolicy,
     });
+
     return new NodejsFunction(this, options.id, {
       entry: join(import.meta.dirname, '..', 'functions', options.entry),
       handler: 'handler',

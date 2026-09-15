@@ -33,6 +33,7 @@ export function useProductSearch({ api, query, isOpen }: ProductSearchOptions): 
     const isWaitingForDebounce = normalizedQuery !== debouncedQuery;
     const shouldFetch = isOpen && (isEmptyQuery || (!isShortQuery && !isWaitingForDebounce));
     const requestId = requestNumber.current + 1;
+
     requestNumber.current = requestId;
 
     if (!shouldFetch) {
@@ -42,6 +43,7 @@ export function useProductSearch({ api, query, isOpen }: ProductSearchOptions): 
 
     const controller = new AbortController();
     const mode = isEmptyQuery ? 'popular' : 'search';
+
     setState({ items: [], status: 'loading', mode });
 
     const request = isEmptyQuery

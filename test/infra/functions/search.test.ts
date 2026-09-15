@@ -45,6 +45,7 @@ function body(value: unknown) {
 describe('search handler', () => {
   it('retrieves lexical and semantic candidates with the expected model and index', async () => {
     const services = dependencies();
+
     services.dynamo.send.mockResolvedValue({
       SearchResults: [
         {
@@ -61,7 +62,6 @@ describe('search handler', () => {
       ],
     });
     const handler = createHandler(services);
-
     const response = await handler(event('cloud'));
 
     expect(response).toMatchObject({ statusCode: 200 });
@@ -70,18 +70,21 @@ describe('search handler', () => {
       match: { kind: 'hybrid' },
     });
     const bedrockCommand = services.bedrock.send.mock.calls[0]?.[0] as InvokeModelCommand;
+
     expect(JSON.parse(new TextDecoder().decode(bedrockCommand.input.body as Uint8Array))).toEqual({
       inputText: 'cloud',
       dimensions: 512,
       normalize: true,
     });
     const lexicalCommand = services.document.send.mock.calls[0]?.[0] as QueryCommand;
+
     expect(lexicalCommand.input).toMatchObject({
       IndexName: 'AutocompleteIndex',
       Limit: 10,
       ExpressionAttributeValues: { ':nameInitial': 'c', ':query': 'cloud' },
     });
     const vectorCommand = services.dynamo.send.mock.calls[0]?.[0] as SearchVectorsCommand;
+
     expect(vectorCommand.input).toMatchObject({
       TableName: 'Products',
       IndexName: 'ProductEmbeddingIndex',
@@ -91,9 +94,9 @@ describe('search handler', () => {
 
   it('falls back to lexical results when Bedrock is unavailable', async () => {
     const services = dependencies();
+
     services.bedrock.send.mockRejectedValue(new Error('Bedrock unavailable'));
     const handler = createHandler(services);
-
     const response = await handler(event('cloud'));
 
     expect(response).toMatchObject({ statusCode: 200 });
@@ -110,7 +113,6 @@ describe('search handler', () => {
   it('rejects empty, short, and overlong normalized queries', async () => {
     const services = dependencies();
     const handler = createHandler(services);
-
     const shortResponse = await handler(event(' x '));
     const longResponse = await handler(event('x'.repeat(TEST_VALUES.overlongLength)));
 

@@ -7,6 +7,7 @@ export function useDebouncedValue<T>(value: T, delay = SEARCH_DEBOUNCE_MILLISECO
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => setDebouncedValue(value), delay);
+
     return () => window.clearTimeout(timeoutId);
   }, [delay, value]);
 
