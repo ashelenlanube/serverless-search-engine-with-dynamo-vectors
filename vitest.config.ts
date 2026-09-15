@@ -7,15 +7,18 @@ export default defineConfig({
         extends: true,
         test: {
           environment: 'node',
-          include: ['infra/**/*.test.ts', 'packages/**/*.test.ts'],
+          include: ['test/infra/**/*.test.ts', 'test/packages/**/*.test.ts'],
           name: 'backend',
         },
       },
       {
+        esbuild: {
+          jsx: 'automatic',
+        },
         extends: true,
         test: {
           environment: 'jsdom',
-          include: ['apps/web/src/**/*.test.tsx'],
+          include: ['test/apps/web/**/*.test.tsx'],
           name: 'web',
         },
       },

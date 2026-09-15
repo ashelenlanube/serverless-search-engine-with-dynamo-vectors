@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { productInputSchema, searchResponseSchema } from './contracts.js';
+import {
+  productInputSchema,
+  searchResponseSchema,
+} from '../../../packages/shared/src/contracts.js';
 
 const PUBLIC_EMBEDDING_VALUE = 0.1;
 const TOO_MANY_SEARCH_ITEMS = 6;

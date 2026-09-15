@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { describe, it } from 'vitest';
-import { SearchEngineStack } from '../lib/search-engine-stack.js';
+import { SearchEngineStack } from '../../infra/lib/search-engine-stack.js';
 
 const VECTOR_DIMENSIONS = 512;
 const API_ROUTE_COUNT = 3;

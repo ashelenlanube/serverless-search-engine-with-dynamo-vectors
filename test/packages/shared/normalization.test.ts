@@ -4,7 +4,7 @@ import {
   normalizeText,
   productEmbeddingInput,
   tokenizeNormalizedText,
-} from './normalization.js';
+} from '../../../packages/shared/src/normalization.js';
 
 describe('normalizeText', () => {
   it('normalizes case, whitespace, punctuation, and diacritics', () => {

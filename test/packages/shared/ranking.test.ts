@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { lexicalScore, rankCandidates, semanticScoreFromCosineDistance } from './ranking.js';
+import {
+  lexicalScore,
+  rankCandidates,
+  semanticScoreFromCosineDistance,
+} from '../../../packages/shared/src/ranking.js';
 
 const HALF_SCORE = 0.5;
 const OUT_OF_RANGE_DISTANCE = 3;

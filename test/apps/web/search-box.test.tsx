@@ -2,8 +2,8 @@ import type { ProductSuggestion } from '@serverless-search/shared';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { ProductApi } from './api.js';
-import { SearchBox } from './search-box.js';
+import type { ProductApi } from '../../../apps/web/src/api.js';
+import { SearchBox } from '../../../apps/web/src/search-box.js';
 
 const PRODUCT: ProductSuggestion = {
   id: 'b9ce668f-22e7-4d85-aed5-77eaaf2f85e3',

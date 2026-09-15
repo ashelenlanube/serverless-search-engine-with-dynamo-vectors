@@ -3,7 +3,7 @@ import type { SearchVectorsCommand } from '@aws-sdk/client-dynamodb';
 import type { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { describe, expect, it, vi } from 'vitest';
-import { createHandler } from './search.js';
+import { createHandler } from '../../../infra/functions/search.js';
 
 const product = {
   id: '81d04927-ee96-4b17-82f4-83e9bee705a4',
